@@ -1,0 +1,164 @@
+{
+  "info": {
+    "name": "ecommerce-monolito",
+    "description": "Monolito de e-commerce. Suba com `./gradlew bootRun` antes de rodar.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "pedidoId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Criar pedido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": 1,\n  \"itens\": [\n    { \"produtoId\": 1, \"quantidade\": 2 },\n    { \"produtoId\": 2, \"quantidade\": 1 }\n  ]\n}"
+        },
+        "description": "Carrega o cliente, baixa o estoque, salva o pedido como CRIADO, grava a Notificacao e loga o e-mail simulado. Tudo numa transacao so."
+      },
+      "response": []
+    },
+    {
+      "name": "Cancelar pedido",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pedidos/{{pedidoId}}/cancelar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos",
+            "{{pedidoId}}",
+            "cancelar"
+          ]
+        },
+        "description": "Devolve o estoque, marca CANCELADO e dispara a segunda notificacao. Ajuste a variavel pedidoId com o id devolvido pela criacao."
+      },
+      "response": []
+    },
+    {
+      "name": "Criar pedido - estoque insuficiente (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": 1,\n  \"itens\": [\n    { \"produtoId\": 4, \"quantidade\": 1 }\n  ]\n}"
+        },
+        "description": "Produto 4 (Headset) nasce com estoque 0 no data.sql."
+      },
+      "response": []
+    },
+    {
+      "name": "Criar pedido - produto inexistente (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": 1,\n  \"itens\": [\n    { \"produtoId\": 999, \"quantidade\": 1 }\n  ]\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar pedido - cliente inexistente (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clienteId\": 999,\n  \"itens\": [\n    { \"produtoId\": 1, \"quantidade\": 1 }\n  ]\n}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancelar pedido - inexistente (404)",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pedidos/9999/cancelar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos",
+            "9999",
+            "cancelar"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
